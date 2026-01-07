@@ -2,20 +2,11 @@
   "name": "Codex",
   "scopeName": "source.cdx",
   "patterns": [
-    { "include": "#comment" },
     { "include": "#tag" },
+    { "include": "#patch" },
     { "include": "#text" }
   ],
   "repository": {
-    "comment": {
-      "patterns": [
-        {
-          "name": "comment.line.number-sign.cdx",
-          "match": "^\\s*#.*$"
-        }
-      ]
-    },
-
     "tag": {
       "patterns": [
         {
@@ -40,7 +31,7 @@
       "patterns": [
         {
           "name": "support.type.cdx",
-          "match": "\\G\\s*([A-Za-z][A-Za-z0-9_-]*)"
+          "match": "\\G\\s*([A-Z][A-Za-z0-9]*)"
         }
       ]
     },
@@ -49,7 +40,7 @@
       "patterns": [
         {
           "name": "meta.attribute.cdx",
-          "match": "\\b([A-Za-z][A-Za-z0-9_-]*)\\b(?=\\=)",
+          "match": "\\b([a-z][A-Za-z0-9]*)\\b(?=\\=)",
           "captures": {
             "1": { "name": "variable.parameter.cdx" }
           }
@@ -90,7 +81,7 @@
       "patterns": [
         {
           "name": "constant.numeric.cdx",
-          "match": "(?<![A-Za-z0-9_-])(?:\\d+\\.\\d+|\\d+)(?![A-Za-z0-9_-])"
+          "match": "(?<![A-Za-z0-9])(?:\\d+\\.\\d+|\\d+)(?![A-Za-z0-9])"
         }
       ]
     },
@@ -99,7 +90,96 @@
       "patterns": [
         {
           "name": "constant.language.boolean.cdx",
-          "match": "(?<![A-Za-z0-9_-])(true|false)(?![A-Za-z0-9_-])"
+          "match": "(?<![A-Za-z0-9])(true|false)(?![A-Za-z0-9])"
+        }
+      ]
+    },
+
+    "patch": {
+      "patterns": [
+        { "include": "#patchStyleDirective" },
+        { "include": "#patchResourceRef" },
+        { "include": "#patchSpan" }
+      ]
+    },
+
+    "patchStyleDirective": {
+      "patterns": [
+        {
+          "name": "meta.embedded.patch.style.cdx",
+          "begin": "\\{\\s*(style)\\s*:",
+          "beginCaptures": {
+            "0": { "name": "punctuation.section.embedded.begin.cdx" },
+            "1": { "name": "keyword.cdx" }
+          },
+          "end": "\\}",
+          "endCaptures": {
+            "0": { "name": "punctuation.section.embedded.end.cdx" }
+          },
+          "patterns": [
+            {
+              "name": "string.special.cdx",
+              "match": "\\b[A-Za-z][A-Za-z0-9]*\\b(?=\\s*=)"
+            },
+            {
+              "name": "keyword.operator.assignment.cdx",
+              "match": "="
+            },
+            {
+              "name": "string.special.cdx",
+              "match": "\\b[A-Za-z0-9][A-Za-z0-9._:-]*\\b"
+            }
+          ]
+        }
+      ]
+    },
+
+    "patchResourceRef": {
+      "patterns": [
+        {
+          "name": "meta.embedded.patch.resource.cdx",
+          "begin": "\\{#",
+          "beginCaptures": {
+            "0": { "name": "punctuation.section.embedded.begin.cdx" }
+          },
+          "end": "\\}",
+          "endCaptures": {
+            "0": { "name": "punctuation.section.embedded.end.cdx" }
+          },
+          "patterns": [
+            {
+              "name": "string.special.cdx",
+              "match": "[^\\}\\s:]+"
+            },
+            {
+              "name": "punctuation.separator.cdx",
+              "match": ":"
+            }
+          ]
+        }
+      ]
+    },
+
+    "patchSpan": {
+      "patterns": [
+        {
+          "name": "meta.embedded.patch.span.cdx",
+          "begin": "\\{\\s*([A-Za-z][A-Za-z0-9]*)\\s*:",
+          "beginCaptures": {
+            "0": { "name": "punctuation.section.embedded.begin.cdx" },
+            "1": { "name": "keyword.cdx" }
+          },
+          "end": "\\}",
+          "endCaptures": {
+            "0": { "name": "punctuation.section.embedded.end.cdx" }
+          },
+          "patterns": [
+            { "include": "#patch" },
+            {
+              "name": "string.special.cdx",
+              "match": "[^\\{\\}]+"
+            }
+          ]
         }
       ]
     },
@@ -107,8 +187,8 @@
     "text": {
       "patterns": [
         {
-          "name": "string.unquoted.text.cdx",
-          "match": "([^<]+)"
+          "name": "string.special.cdx",
+          "match": "([^<{]+)"
         }
       ]
     }
