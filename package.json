@@ -1,0 +1,25 @@
+{
+  "name": "cdx",
+  "displayName": "Codex",
+  "description": "The Codex declarative semantic language.",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.107.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [{
+      "id": "cdx",
+      "aliases": ["Codex", "cdx"],
+      "extensions": [".cdx"],
+      "configuration": "./language-configuration.json"
+    }],
+    "grammars": [{
+      "language": "cdx",
+      "scopeName": "source.cdx",
+      "path": "./syntaxes/cdx.tmLanguage.json"
+    }]
+  }
+}
