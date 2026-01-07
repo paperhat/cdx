@@ -1,32 +1,116 @@
 {
-	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
-	"name": "Codex",
-	"patterns": [
-		{
-			"include": "#keywords"
-		},
-		{
-			"include": "#strings"
-		}
-	],
-	"repository": {
-		"keywords": {
-			"patterns": [{
-				"name": "keyword.control.cdx",
-				"match": "\\b(if|while|for|return)\\b"
-			}]
-		},
-		"strings": {
-			"name": "string.quoted.double.cdx",
-			"begin": "\"",
-			"end": "\"",
-			"patterns": [
-				{
-					"name": "constant.character.escape.cdx",
-					"match": "\\\\."
-				}
-			]
-		}
-	},
-	"scopeName": "source.cdx"
+  "name": "Codex",
+  "scopeName": "source.cdx",
+  "patterns": [
+    { "include": "#comment" },
+    { "include": "#tag" },
+    { "include": "#text" }
+  ],
+  "repository": {
+    "comment": {
+      "patterns": [
+        {
+          "name": "comment.line.number-sign.cdx",
+          "match": "^\\s*#.*$"
+        }
+      ]
+    },
+
+    "tag": {
+      "patterns": [
+        {
+          "name": "meta.tag.cdx",
+          "begin": "<\\/?",
+          "beginCaptures": {
+            "0": { "name": "punctuation.definition.tag.begin.cdx" }
+          },
+          "end": "\\/?>",
+          "endCaptures": {
+            "0": { "name": "punctuation.definition.tag.end.cdx" }
+          },
+          "patterns": [
+            { "include": "#tagName" },
+            { "include": "#attribute" }
+          ]
+        }
+      ]
+    },
+
+    "tagName": {
+      "patterns": [
+        {
+          "name": "support.type.cdx",
+          "match": "\\G\\s*([A-Za-z][A-Za-z0-9_-]*)"
+        }
+      ]
+    },
+
+    "attribute": {
+      "patterns": [
+        {
+          "name": "meta.attribute.cdx",
+          "match": "\\b([A-Za-z][A-Za-z0-9_-]*)\\b(?=\\=)",
+          "captures": {
+            "1": { "name": "variable.parameter.cdx" }
+          }
+        },
+        {
+          "name": "keyword.operator.assignment.cdx",
+          "match": "="
+        },
+        { "include": "#string" },
+        { "include": "#number" },
+        { "include": "#boolean" }
+      ]
+    },
+
+    "string": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.cdx",
+          "begin": "\"",
+          "beginCaptures": {
+            "0": { "name": "punctuation.definition.string.begin.cdx" }
+          },
+          "end": "\"",
+          "endCaptures": {
+            "0": { "name": "punctuation.definition.string.end.cdx" }
+          },
+          "patterns": [
+            {
+              "name": "constant.character.escape.cdx",
+              "match": "\\\\[\\\\\"nt]"
+            }
+          ]
+        }
+      ]
+    },
+
+    "number": {
+      "patterns": [
+        {
+          "name": "constant.numeric.cdx",
+          "match": "(?<![A-Za-z0-9_-])(?:\\d+\\.\\d+|\\d+)(?![A-Za-z0-9_-])"
+        }
+      ]
+    },
+
+    "boolean": {
+      "patterns": [
+        {
+          "name": "constant.language.boolean.cdx",
+          "match": "(?<![A-Za-z0-9_-])(true|false)(?![A-Za-z0-9_-])"
+        }
+      ]
+    },
+
+    "text": {
+      "patterns": [
+        {
+          "name": "string.unquoted.text.cdx",
+          "match": "([^<]+)"
+        }
+      ]
+    }
+  }
 }
