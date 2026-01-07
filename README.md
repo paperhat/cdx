@@ -6,7 +6,7 @@ Codex is a declarative semantic markup language resembling XML or JSX but unrela
 
 Highlights Codex language syntax in VS Code. Very basic at the moment.
 
-![feature X](images/cdx.png)
+![feature X](https://raw.githubusercontent.com/paperhat/cdx/main/images/cdx.png)
 
 
 ## Requirements
